@@ -9,7 +9,7 @@ Objectives of this code
 ========================
 The article https://eprint.iacr.org/2026/1318.pdf describes a probabilistic heuristic attack on the signature scheme Hawk (https://hawk-sign.info/).
 
-The algorithm has not been implemented yet, and one of the heuristic has been invalidated.
+The algorithm has not been fully implemented yet, and its success probability is not clear.
 
 With this code, I am trying to estimate empirically an upper bound on the success probability of this attack.
 

@@ -1,0 +1,41 @@
+============================================================
+==  This is a small ungoing code to try to estimate the   ==
+==  success probability of the algorithm from             ==
+==  https://eprint.iacr.org/2026/1318.pdf                 ==
+============================================================
+
+
+Objectives of this code
+========================
+The article https://eprint.iacr.org/2026/1318.pdf describes a probabilistic heuristic attack on the signature scheme Hawk (https://hawk-sign.info/).
+
+The algorithm has not been implemented yet, and one of the heuristic has been invalidated.
+
+With this code, I am trying to estimate empirically an upper bound on the success probability of this attack.
+
+
+
+First results
+==============
+For a cyclotomic field of conductor 8 and degree 4, the empirical success probability is smaller than 1/1000.
+
+For a cyclotomic field of conductor 16 and degree 8, none of the 300 000 tests I ran came out successful.
+
+
+
+Strategy
+=========
+In order to estimate the success probability of the algorithm from ePrint 2026/1318, I do *not* implement the algorithm. Instead, I rely on the observation that if the algorithm succeeds, then the element beta sampled at step 16 of the algorithm (see Algorithm 2) commutes with at least one of the solutions to the nrd-PIP instance.*
+
+So my strategy is to generate a random nrd-PIP instance, compute all its solutions (which I can do efficiently), compute some element beta as in the algorithm from ePrint 2026/1318, and finally check whether beta commutes with one of the solutions to the nrd-PIP instance. I then repeat this process multiple times, to estimate the empirical probability that beta commutes with one of the solution to the nrd-PIP instance. This provides an upper bound on the success probability of the algorithm from ePrint 2026/1318.
+
+* This is due to the fact that the algorithm looks for a solution to the nrd-PIP instance in the field K(beta). So if the algorithm succeeds, then a solution must exist in the field K(beta), and so in particular is must commute with beta.
+
+
+How to run
+===========
+There is a single sage file containing all the code (`estimating_success_probability.sage'). Simply load it, update the conductor of the field at the end of the file if needed (this only works for power-of-two conductors). And then run
+
+     multi_tests(Nz,Nbeta)
+
+where Nz is the number of different nrd-PIP instance you want to generate, and Nbeta is the number of random beta generated for each nrd-PIP instances (so the total number of tests is Nz*Nbeta).
